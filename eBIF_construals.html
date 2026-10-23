@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>eBIF Study</title>
+    <link rel="stylesheet" type="text/css" href="./jspsych/dist/jspsych.css">
+    <script src="./jspsych/dist/jspsych.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-survey-keytrack.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-audio-keytrack.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-survey-multi-choice-center.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-ranking.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-survey-text-number.js"></script>
+    <script src="./jspsych/dist/custom_plugins/plugin-survey-text-dropdown.js"></script>
+
+    <script src="./jspsych/dist/plugin-html-keyboard-response.js"></script>
+    <script src="./jspsych/dist/plugin-html-button-response.js"></script>
+    <script src="./jspsych/dist/plugin-audio-button-response.js"></script>
+    <script src="./jspsych/dist/plugin-audio-keyboard-response.js"></script>
+
+    <script src="./jspsych/dist/plugin-initialize-microphone.js"></script>
+    <script src="./jspsych/dist/plugin-html-audio-response.js"></script>
+
+    <script src="./jspsych/dist/plugin-survey-multi-select.js"></script>
+    <script src="./jspsych/dist/plugin-survey-multi-choice.js"></script>
+    <script src="./jspsych/dist/plugin-survey-likert.js"></script>
+    <script src="./jspsych/dist/plugin-survey-text.js"></script>
+
+    <!-- <script src="./jspsych/dist/custom/plugin-survey-keytrack.js"></script>
+    <script src="./jspsych/dist/custom/jspsych-survey-text-number.js"></script>
+    <script src="./jspsych/dist/custom/jspsych-survey-text-dropdown.js"></script>
+    <script src="./jspsych/dist/custom/jspsych-audio-button-mousetrack.js"></script> -->
+  </head>
+  <body></body>
+
+<script>
+    // Initialize JsPsych
+    var subjectID = "000" // Piloting will just be 000
+
+
+    var jsPsych = initJsPsych({
+        use_webaudio: false,
+        on_finish: function(){
+            jsPsych.data.get().localSave('csv',subjectID+'_'+'.csv'); // !!! Edit this for file name
+            jsPsych.data.get().localSave('json',subjectID+'_'+'.json'); // !!! Edit this for file name
+            jsPsych.data.displayData();
+            // downloadAudio(jsPsych.data.get());
+        }
+    });
+
+    var timeline = [];
+
+    /* ~~~ CONSENT ~~~ */
+    // EDIT THIS! Include inline form with the proper study info sheet
+    var welcome = {
+        type: jsPsychHtmlButtonResponse,
+        button_html: '<button class="jspsych-btn" style="margin-bottom: 10px">%choice%</button>',
+        stimulus: '<p align="center">This research is being conducted by a psychology research lab at the University of Chicago.</p>'+
+        '<p align="center">In this task, you first will be rating your preferences of different statement. You will then be responding to a series of questions about you and how you think.</p>',
+        choices: ['Next']
+    };
+
+    var eBIFintro = {
+        type: jsPsychHtmlButtonResponse,
+        button_html: '<button class="jspsych-btn" style="margin-bottom: 10px">%choice%</button>',
+        stimulus: '<p align="left">Any behavior can be identified in many ways. For example, one person might describe a behavior as "typing a paper," while another might describe the behavior as "pushing keys." Yet another person might describe the behavior as "expressing thoughts." We are interested in your personal preferences for how a number of different behaviors should be described. On the following pages you will find several different behaviors listed. After each behavior there will be three choices of different ways in which the behavior might be identified.</p>'+
+
+        '<p align="left">Your task is to rate to what extent each identification describes the behavior for you. Of course, there are no right or wrong answers. People simply differ in their preferences for the different behavior descriptions, and we are interested in your personal preferences.</p>'+
+        '<p>You will be using the following scale to mark the degree to which the description aligns with your preference.</p>'+
+        '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">Do not prefer at all</th><th style="padding:10px">Prefer a little</th><th style="padding:10px">Prefer a lot</th><th style="padding:10px">Prefer completely</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+            '</tr>'+
+        '</table></p>',
+        choices: ['Begin']
+    };
+
+    /* Extended behavioral identification form */
+    var eBIF1 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+        '<table align="center">'+
+            '<tr>'+
+                '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+            '</tr>'+
+        '</table>'+
+        '<p style="color: darkred; font-size: 20px"><b>Behavior: Making a list</b></p>',
+        data: { "trialType": "eBIF1"},
+        questions: [
+            {
+                prompt: 'Writing things down',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4'
+                ],
+                horizontal: true,
+                name: 'eBIF1-low'
+            },
+            {
+                prompt: 'Getting organized',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4'
+                ],
+                horizontal: true,
+                name: 'eBIF1-high'
+            },
+            {
+                prompt: 'Living an organized life',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4'
+                ],
+                horizontal: true,
+                name: 'eBIF1-existential'
+            }
+        ]
+    }
+
+    var eBIF2 = {
+    type: jsPsychSurveyMultiChoiceC,
+    randomize_question_order: true,
+    preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+        '<table align="center">'+
+            '<tr>'+
+                '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+            '</tr>'+
+        '</table>'+
+        '<p style="color: darkred; font-size: 20px"><b>Behavior: Reading</b></p>',
+    data: { "trialType": "eBIF2"},
+    questions: [
+        {
+            prompt: 'Following lines of print',
+            options: ['1', '2', '3', '4'],
+            horizontal: true,
+            name: 'eBIF2-low'
+        },
+        {
+            prompt: 'Gaining knowledge',
+            options: ['1', '2', '3', '4'],
+            horizontal: true,
+            name: 'eBIF2-high'
+        },
+        {
+            prompt: 'Learning life possibilities',
+            options: ['1', '2', '3', '4'],
+            horizontal: true,
+            name: 'eBIF2-existential'
+        }
+    ]
+};
+
+    var eBIF3 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Washing clothes</b></p>',
+        data: { "trialType": "eBIF3"},
+        questions: [
+            {
+                prompt: 'Putting clothes into the machine',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF3-low'
+            },
+            {
+                prompt: 'Removing odors from clothes',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF3-high'
+            },
+            {
+                prompt: 'Accepting routines as part of life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF3-existential'
+            }
+        ]
+    };
+
+    var eBIF4 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Cleaning the house</b></p>',
+        data: { "trialType": "eBIF4"},
+        questions: [
+            {
+                prompt: 'Vacuuming the floor',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF4-low'
+            },
+            {
+                prompt: "Showing one's cleanliness",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF4-high'
+            },
+            {
+                prompt: 'Renewing life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF4-existential'
+            }
+        ]
+    };
+
+    var eBIF5 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Locking a door</b></p>',
+        data: { "trialType": "eBIF5"},
+        questions: [
+            {
+                prompt: 'Putting a key in the lock',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF5-low'
+            },
+            {
+                prompt: 'Securing the house',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF5-high'
+            },
+            {
+                prompt: 'Having security in life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF5-existential'
+            }
+        ]
+    };
+
+    var eBIF6 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Toothbrushing</b></p>',
+        data: { "trialType": "eBIF6"},
+        questions: [
+            {
+                prompt: "Moving a brush around in one's mouth",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF6-low'
+            },
+            {
+                prompt: 'Preventing tooth decay',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF6-high'
+            },
+            {
+                prompt: 'Maintaining a healthy life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF6-existential'
+            }
+        ]
+    };
+
+    var eBIF7 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Taking a test</b></p>',
+        data: { "trialType": "eBIF7"},
+        questions: [
+            {
+                prompt: 'Answering questions',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF7-low'
+            },
+            {
+                prompt: "Showing one's knowledge",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF7-high'
+            },
+            {
+                prompt: 'Living a successful life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF7-existential'
+            }
+        ]
+    };
+
+    var eBIF8 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Greeting someone</b></p>',
+        data: { "trialType": "eBIF8"},
+        questions: [
+            {
+                prompt: 'Saying hello',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF8-low'
+            },
+            {
+                prompt: 'Showing friendliness',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF8-high'
+            },
+            {
+                prompt: 'Avoiding experiencing life alone',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF8-existential'
+            }
+        ]
+    };
+
+    var eBIF9 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Resisting temptation</b></p>',
+        data: { "trialType": "eBIF9"},
+        questions: [
+            {
+                prompt: 'Saying "no"',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF9-low'
+            },
+            {
+                prompt: 'Showing moral courage',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF9-high'
+            },
+            {
+                prompt: 'Living a prudent life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF9-existential'
+            }
+        ]
+    };
+
+    var eBIF10 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Eating</b></p>',
+        data: { "trialType": "eBIF10"},
+        questions: [
+            {
+                prompt: 'Chewing and swallowing',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF10-low'
+            },
+            {
+                prompt: 'Getting nutrition',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF10-high'
+            },
+            {
+                prompt: 'Sustaining life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF10-existential'
+            }
+        ]
+    };
+
+    var eBIF11 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Traveling by car</b></p>',
+        data: { "trialType": "eBIF11"},
+        questions: [
+            {
+                prompt: 'Following a map',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF11-low'
+            },
+            {
+                prompt: 'Seeing countryside',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF11-high'
+            },
+            {
+                prompt: "Feeling life's expansiveness",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF11-existential'
+            }
+        ]
+    };
+
+    var eBIF12 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Pushing a doorbell</b></p>',
+        data: { "trialType": "eBIF12"},
+        questions: [
+            {
+                prompt: 'Moving a finger',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF12-low'
+            },
+            {
+                prompt: "Seeing if someone's home",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF12-high'
+            },
+            {
+                prompt: "Being invited into others' lives",
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF12-existential'
+            }
+        ]
+    };
+
+    var eBIF13 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Reading about a death in the news</b></p>',
+        data: { "trialType": "eBIF13"},
+        questions: [
+            {
+                prompt: 'Reading words',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF13-low'
+            },
+            {
+                prompt: 'Learning how someone died',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF13-high'
+            },
+            {
+                prompt: 'Reflecting on mortality',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF13-existential'
+            }
+        ]
+    };
+
+    var eBIF14 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Looking up at the stars on a clear night</b></p>',
+        data: { "trialType": "eBIF14"},
+        questions: [
+            {
+                prompt: 'Moving your eyes to the sky',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF14-low'
+            },
+            {
+                prompt: 'Searching for stars',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF14-high'
+            },
+            {
+                prompt: 'Pondering existence',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF14-existential'
+            }
+        ]
+    };
+
+    var eBIF15 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Celebrating a birthday</b></p>',
+        data: { "trialType": "eBIF15"},
+        questions: [
+            {
+                prompt: 'Gathering, eating, or exchanging gifts',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF15-low'
+            },
+            {
+                prompt: 'Having fun with the birthday person',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF15-high'
+            },
+            {
+                prompt: 'Reflecting on the course of a life',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF15-existential'
+            }
+        ]
+    };
+
+    var eBIF16 = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: true,
+        preamble: 'Use the following scale to mark the degree to which the description aligns with your preference.<br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Do not prefer at all</th><th style="padding:0 5px">Prefer a little</th><th style="padding:0 5px">Prefer a lot</th><th style="padding:0 5px">Prefer completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p style="color: darkred; font-size: 20px"><b>Behavior: Walking through a crowd</b></p>',
+        data: { "trialType": "eBIF16"},
+        questions: [
+            {
+                prompt: 'Taking steps',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF16-low'
+            },
+            {
+                prompt: 'Going towards a destination',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF16-high'
+            },
+            {
+                prompt: 'Seeing many possible lives',
+                options: ['1', '2', '3', '4'],
+                horizontal: true,
+                name: 'eBIF16-existential'
+            }
+        ]
+    };
+       
+    
+    // Individual differences and other scales/questions
+    var surveysIntro = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `<p>You will now be moving on to the second part of the study. The following will be a series of questions about you and your experiences.</p>`,
+        choices: ['Continue'],
+    }
+
+    // Full-length Big5, in case we want it
+    var bigFive = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">Here are a number of characteristics that may or may not apply to you. For example, do you agree that you are someone who likes to spend time with others? Please write a number next to each statement to indicate the extent to which you agree or disagree with that statement.</p>'+
+        '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">Disagree strongly</th><th style="padding:10px">Disagree a little</th><th style="padding:10px">Neither agree nor disagree</th><th style="padding:10px">Agree a little</th><th style="padding:10px">Agree strongly</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>'+
+            '</tr>'+
+        '</table></p>'+
+        '<p><u>I see myself as someone who...</u></p>',
+        questions: [
+            {
+                prompt: '1. Is talkative',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big1'
+            },
+            {
+                prompt: '2. Tends to find fault in others',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big2'
+            },
+            {
+                prompt: '3. Does a thorough job',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big3'
+            },
+            {
+                prompt: '4. Is depressed, blue',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big4'
+            },
+            {
+                prompt: '5. Is original, comes up with new ideas',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big5'
+            },
+            {
+                prompt: '6. Is reserved',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big6'
+            },
+            {
+                prompt: '7. Is helpful and unselfish with others',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big7'
+            },
+            {
+                prompt: '8. Can be somewhat careless',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big8'
+            },
+            {
+                prompt: '9. Is relaxed, handles stress well',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big9'
+            },
+            {
+                prompt: '10. Is curious about many different things',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big10'
+            },
+            {
+                prompt: '11. Is full of energy',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big11'
+            },
+            {
+                prompt: '12. Starts quarrels with others',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big12'
+            },
+            {
+                prompt: '13. Is a reliable worker',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big13'
+            },
+            {
+                prompt: '14. Can be tense',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big14'
+            },
+            {
+                prompt: '15. Is ingenious, a deep thinker',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big15'
+            },
+            {
+                prompt: '16. Generates a lot of enthusiasm',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big16'
+            },
+            {
+                prompt: '17. Has a forgiving nature',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big17'
+            },
+            {
+                prompt: '18. Tends to be disorganized',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big18'
+            },
+            {
+                prompt: '19. Worries a lot',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big19'
+            },
+            {
+                prompt: '20. Has an active imagination',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big20'
+            },
+            {
+                prompt: '21. Tends to be quiet',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big21'
+            },
+            {
+                prompt: '22. Is generally trusting',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big22'
+            },
+            {
+                prompt: '23. Tends to be lazy',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big23'
+            },
+            {
+                prompt: '24. Is emotionally stable, not easily upset',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big24'
+            },
+            {
+                prompt: '25. Is inventive',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big25'
+            },
+            {
+                prompt: '26. Has an assertive personality',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big26'
+            },
+            {
+                prompt: '27. Can be cold and aloof',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big27'
+            },
+            {
+                prompt: '28. Perseveres until the task is finished',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big28'
+            },
+            {
+                prompt: '29. Can be moody',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big29'
+            },
+            {
+                prompt: '30. Values artistic, aesthetic experiences',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big30'
+            },
+            {
+                prompt: '31. Is sometimes shy, inhibited',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big31'
+            },
+            {
+                prompt: '32. Is considerate and kind to almost everyone',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big32'
+            },
+            {
+                prompt: '33. Does things efficiently',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big33'
+            },
+            {
+                prompt: '34. Remains calm in tense situations',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big34'
+            },
+            {
+                prompt: '35. Prefers work that is routine',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big35'
+            },
+            {
+                prompt: '36. Is outgoing, sociable',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big36'
+            },
+            {
+                prompt: '37. Is sometimes rude to others',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big37'
+            },
+            {
+                prompt: '38. Make plans and follows through with them',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big38'
+            },
+            {
+                prompt: '39. Gets nervous easily',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big39'
+            },
+            {
+                prompt: '40. Likes to reflect, play with ideas',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big40'
+            },
+            {
+                prompt: '41. Has few artistic interests',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big41'
+            },
+            {
+                prompt: '42. Likes to cooperate with others',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big42'
+            },
+            {
+                prompt: '43. Is easily distracted',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big43'
+            },
+            {
+                prompt: '44. Is sophisticated in art, music, or literature',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'Big44'
+            },
+        ]
+    }
+
+    // Big5-S - 15 question short form, from https://www.psytoolkit.org/cgi-bin/3.6.8/survey?s=hgHBk
+    var bfiS = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: false,
+        preamble: 'Below are a number of statements about personality. '+
+            'For each statement, indicate how much you agree or disagree with it.<br/><br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Strongly disagree</th>'+
+                    '<th style="padding:0 5px">Disagree</th>'+
+                    '<th style="padding:0 5px">Somewhat disagree</th>'+
+                    '<th style="padding:0 5px">Neither agree nor disagree</th>'+
+                    '<th style="padding:0 5px">Somewhat agree</th>'+
+                    '<th style="padding:0 5px">Agree</th>'+
+                    '<th style="padding:0 5px">Strongly agree</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                    '<td>5</td><td>6</td><td>7</td>'+
+                '</tr>'+
+            '</table>'+
+            '<p>I see myself as someone who...</p>',
+        data: { "trialType": "bfiS" },
+        questions: [
+            {
+                prompt: 'worries a lot',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS1-N'
+            },
+            {
+                prompt: 'gets nervous easily',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS2-N'
+            },
+            {
+                prompt: 'remains calm in tense situations',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS3-NR'
+            },
+            {
+                prompt: 'is talkative',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS4-E'
+            },
+            {
+                prompt: 'is outgoing, sociable',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS5-E'
+            },
+            {
+                prompt: 'is reserved',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS6-ER'
+            },
+            {
+                prompt: 'is original, comes up with new ideas',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS7-O'
+            },
+            {
+                prompt: 'values artistic, aesthetic experiences',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS8-O'
+            },
+            {
+                prompt: 'has an active imagination',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS9-O'
+            },
+            {
+                prompt: 'is sometimes rude to others',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS10-AR'
+            },
+            {
+                prompt: 'has a forgiving nature',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS11-A'
+            },
+            {
+                prompt: 'is considerate and kind to almost everyone',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS12-A'
+            },
+            {
+                prompt: 'does a thorough job',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS13-C'
+            },
+            {
+                prompt: 'tends to be lazy',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS14-CR'
+            },
+            {
+                prompt: 'does things efficiently',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'bfiS15-C'
+            }
+        ]
+    };
+
+    // Self consciousness scale - https://www.cmu.edu/dietrich/psychology/pdf/scales/SCSR_Scale.pdf
+    var selfConsciousness = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">Please answer the following questions about yourself. For each of the statements, indiate how much each statement is like you by using the following scale:</p>'+
+        '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">a lot like me</th><th style="padding:10px">somewhat like me</th><th style="padding:10px">a little like me</th><th style="padding:10px">not like me at all</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>3</td><td>2</td><td>1</td><td>0</td>'+
+            '</tr>'+
+        '</table></p>'+
+        '<p align="left">Please be as honest as you can throughout, and try not to let your responses to one question influence your response to other questions. There are no right or wrong answers.</p>',
+        data: { "trialType": "selfConsciousness"},
+        questions: [
+            {
+                prompt: '1. I\'m always trying to figure myself out.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-1'
+            },
+            {
+                prompt: '2. I\'m concerned about my style of doing things',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-2'
+            },
+            {
+                prompt: '3. It takes me time to get over my shyness in new situations.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-3'
+            },
+            {
+                prompt: '4. I think about myself a lot.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-4'
+            },
+            {
+                prompt: '5. I care a lot about how I present myself to others.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-5'
+            },
+            {
+                prompt: '6. I often daydream about myself.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-6'
+            },
+            {
+                prompt: '7. It\'s hard for me to work when someone is watching me.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-7'
+            },
+            {
+                prompt: '8. I never take a hard look at myself.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-8R' // Reverse coded
+            },
+            {
+                prompt: '9. I get embarrassed very easily.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-9'
+            },
+            {
+                prompt: '10. I\'m self-conscious about the way I look.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-10'
+            },
+            {
+                prompt: '11. It\'s easy for me to talk to strangers.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-11R' // Reverse coded
+            },
+            {
+                prompt: '12. I generally pay attention to my inner feelings.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-12'
+            },
+            {
+                prompt: '13. I usually worry about making a good impression.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-13'
+            },
+            {
+                prompt: '14. I\'m constantly thinking about my reasons for doing things.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-14'
+            },
+            {
+                prompt: '15. I feel nervous when I speak in front of a group.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-15'
+            },
+            {
+                prompt: '16. Before I leave my house, I check how I look.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-16'
+            },
+            {
+                prompt: '17. I sometimes step back (in my mind) in order to examine myself from a distance.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-17'
+            },
+            {
+                prompt: '18. I\'m concerned about what other people think of me.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-18'
+            },
+            {
+                prompt: '19. I\'m quick to notice changes in my mood.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-19'
+            },
+            {
+                prompt: '20. I\'m usually aware of my appearance.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-public-20'
+            },
+            {
+                prompt: '21. I know the way my mind works when I work through a problem.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-private-21'
+            },
+            {
+                prompt: '22. Large groups make me nervous.',
+                options: [
+                    '3',
+                    '2',
+                    '1',
+                    '0'
+                ],
+                horizontal: true,
+                name: 'SCscale-social-22'
+            }
+        ]
+    }
+
+    // Need for Cognition scale, 18-item version - https://richardepetty.com/materials/
+    var cognition = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">For each statement listed below, choose the number that indicates the extent to which you feel it is characteristic of you. For example, if the statement is not at all like you, select number 1 for "Extremely Uncharacteristic," or if you really can\'t decide if the statement is or is not characteristic of you, select number 3 for "Uncertain."</p>'+
+        '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">Extremely uncharacteristic of me</th><th style="padding:10px">Somewhat uncharacteristic of me</th><th style="padding:10px">Uncertain</th><th style="padding:10px">Somewhat characteristic of me</th><th style="padding:10px">Extremely characteristic of me</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>'+
+            '</tr>'+
+        '</table></p>',
+        questions: [
+            {
+                prompt: 'I would prefer complex to simple problems.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition1'
+            },
+            {
+                prompt: 'I like to have the responsibility of handling a situation that requires a lot of thinking.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition2'
+            },
+            {
+                prompt: 'Thinking is not my idea of fun.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition3-rc'
+            },
+            {
+                prompt: 'I would rather do something that requires little thought than something that is sure to challenge my thinking abilities.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition4-rc'
+            },
+            {
+                prompt: 'I try to anticipate and avoid situations where there is likely a chance I will have to think in depth about something.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition5-rc'
+            },
+            {
+                prompt: 'I find satisfaction in deliberating hard and for long hours.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition6'
+            },
+            {
+                prompt: 'I only think as hard as I have to.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition7-rc'
+            },
+            {
+                prompt: 'I prefer to think about small, daily projects to long-term ones.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition8-rc'
+            },
+            {
+                prompt: 'I like tasks that require little thought once I\'ve learned them.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition9-rc'
+            },
+            {
+                prompt: 'The idea of relying on thought to make my way to the top appeals to me.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition10'
+            },
+            {
+                prompt: 'I really enjoy a task that involves coming up with new solutions to problems.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition11'
+            },
+            {
+                prompt: 'Learning new ways to think doesn\'t excite me very much.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition12-rc'
+            },
+            {
+                prompt: 'I prefer my life to be filled with puzzles that I must solve.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition13'
+            },
+            {
+                prompt: 'The notion of thinking abstractly is appealing to me.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition14'
+            },
+            {
+                prompt: 'I would prefer a task that is intellectual, difficult, and important to one that is somewhat important but does not require much thought.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition15'
+            },
+            {
+                prompt: 'I feel relief rather than satisfaction after completing a task that required a lot of mental effort.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition16-rc'
+            },
+            {
+                prompt: 'It\'s enough for me that something gets the job done; I don\'t care how or why it works.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition17-rc'
+            },
+            {
+                prompt: 'I usually end up deliberating about issues even when they do not affect me personally.',
+                options: ['1', '2', '3', '4', '5'],
+                horizontal: true,
+                required: false,
+                name: 'cognition18'
+            }
+        ],
+        data: {
+            trialType: 'cognition'
+        }
+    };
+
+    // I-PANAS-SF (Positive and negative affect scale). Short form version, Thompson, 2007
+    var PANAS = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">Thinking about yourself and how you normally feel, to what extend do you generally feel:</p>',
+        questions: [
+            {
+                prompt: 'Upset',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS1'
+            },
+            {
+                prompt: 'Hostile',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS2'
+            },
+            {
+                prompt: 'Alert',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS3'
+            },
+            {
+                prompt: 'Ashamed',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS4'
+            },
+            {
+                prompt: 'Inspired',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS5'
+            },
+            {
+                prompt: 'Nervous',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS6'
+            },
+            {
+                prompt: 'Determined',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS7'
+            },
+            {
+                prompt: 'Attentive',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS8'
+            },
+            {
+                prompt: 'Afraid',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS9'
+            },
+            {
+                prompt: 'Active',
+                options: ['1 (never)', '2', '3', '4', '5 (always)'],
+                horizontal: true,
+                required: false,
+                name: 'PANAS10'
+            },
+        ]
+    }
+
+    // PROMIS General Life Satisfaction - https://healthmeasures.net/pdfs/PROMIS%20Item%20Bank%20v1.0%20-%20General%20Life%20Satisfaction_09Nov2022.pdf
+    var lifeSatisfaction = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: false,
+        preamble: 'Please indicate how much you agree or disagree with each statement.<br/><br/>'+
+            '<b>For the first five statements, use the 1–7 scale:</b>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Strongly disagree</th>'+
+                    '<th style="padding:0 5px">Disagree</th>'+
+                    '<th style="padding:0 5px">Slightly disagree</th>'+
+                    '<th style="padding:0 5px">Neither agree nor disagree</th>'+
+                    '<th style="padding:0 5px">Slightly agree</th>'+
+                    '<th style="padding:0 5px">Agree</th>'+
+                    '<th style="padding:0 5px">Strongly agree</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td>'+
+                    '<td>5</td><td>6</td><td>7</td>'+
+                '</tr>'+
+            '</table>'+
+            '<br/><b>For the last five statements, use the 1–5 scale:</b>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Strongly disagree</th>'+
+                    '<th style="padding:0 5px">Disagree</th>'+
+                    '<th style="padding:0 5px">Neither agree nor disagree</th>'+
+                    '<th style="padding:0 5px">Agree</th>'+
+                    '<th style="padding:0 5px">Strongly agree</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>'+
+                '</tr>'+
+            '</table></p>',
+        data: { "trialType": "promisLifeSat" },
+        questions: [
+            {
+                prompt: 'In most ways, my life is close to perfect.',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'PA045m'
+            },
+            {
+                prompt: 'If I could live my life over, I would change almost nothing.',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'PA046'
+            },
+            {
+                prompt: 'I am satisfied with my life.',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'PA047'
+            },
+            {
+                prompt: 'So far I have gotten the important things I want in life.',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'PA048'
+            },
+            {
+                prompt: 'My life situation is excellent.',
+                options: ['1','2','3','4','5','6','7'],
+                horizontal: true,
+                name: 'PA049m'
+            },
+            {
+                prompt: 'My life is going well.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'PA066'
+            },
+            {
+                prompt: 'My life is just right.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'PA067'
+            },
+            {
+                prompt: 'I wish I had a different kind of life.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'PA069'
+            },
+            {
+                prompt: 'I have a good life.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'PA070'
+            },
+            {
+                prompt: 'I have what I want in life.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'PA071'
+            }
+        ]
+    };
+
+
+    // Meaning in Life Questionnaire
+    var meaning = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">Please take a moment to think about what makes your life feel important to you. Please respond to the following statements as truthfully and accurately as you can, and also please remember that these are very subjective questions and that there are no right or wrong answers. Please answer according to the scale below:</p>'+
+         '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">Absolutely Untrue</th>'+
+                '<th style="padding:10px">Mostly Untrue</th>'+
+                '<th style="padding:10px">Somewhat Untrue</th>'+
+                '<th style="padding:10px">Can\'t Say True or False</th>'+
+                '<th style="padding:10px">Somewhat True</th>'+
+                '<th style="padding:10px">Mostly True</th>'+
+                '<th style="padding:10px">Absolutely True</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>'+
+            '</tr>'+
+        '</table></p>',
+        questions: [
+            {
+                prompt: 'I understand my life\'s meaning.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning1-P'
+            },
+            {
+                prompt: 'I am looking for something that makes my life feel meaningful.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning2-S'
+            },
+            {
+                prompt: 'I am always looking to find my life\'s purpose.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning3-S'
+            },
+            {
+                prompt: 'My life has a clear sense of purpose.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning4-P'
+            },
+            {
+                prompt: 'I have a good sense of what makes my life meaningful.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning5-P'
+            },
+            {
+                prompt: 'I have discovered a satisfying life purpose.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning6-P'
+            },
+            {
+                prompt: 'I am always searching for something that makes my life feel significant.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning7-S'
+            },
+            {
+                prompt: 'I am seeking a purpose or mission for my life.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning8-S'
+            },
+            {
+                prompt: 'My life has no clear purpose.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning9-PR'
+            },
+            {
+                prompt: 'I am searching for meaning in my life.',
+                options: ['1', '2', '3', '4', '5', '6', '7'],
+                horizontal: true,
+                required: false,
+                name: 'meaning10-S'
+            }
+        ]
+    }
+
+    // Locus of control, 4-item version - https://pmc.ncbi.nlm.nih.gov/articles/instance/9273068/bin/pone.0271289.s002.pdf
+    var locusControl = {
+        type: jsPsychSurveyMultiChoiceC,
+        randomize_question_order: false,
+        preamble: 'For each statement, indicate how much it applies to you.<br/><br/>'+
+            '<table align="center">'+
+                '<tr>'+
+                    '<th style="padding:0 5px">Does not apply at all</th>'+
+                    '<th style="padding:0 5px">Applies a bit</th>'+
+                    '<th style="padding:0 5px">Applies somewhat</th>'+
+                    '<th style="padding:0 5px">Applies mostly</th>'+
+                    '<th style="padding:0 5px">Applies completely</th>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>'+
+                '</tr>'+
+            '</table></p>',
+        data: { "trialType": "locusControl" },
+        questions: [
+            {
+                prompt: 'I’m my own boss.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'locusControl1I'
+            },
+            {
+                prompt: 'If I work hard, I will succeed.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'locusControl2I'
+            },
+            {
+                prompt: 'Whether at work or in my private life: What I do is mainly determined by others.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'locusControl3E'
+            },
+            {
+                prompt: 'Fate often gets in the way of my plans.',
+                options: ['1','2','3','4','5'],
+                horizontal: true,
+                name: 'locusControl4E'
+            }
+        ]
+    };
+
+
+    // var urlParam = window.location.search;
+    // var userID = urlParam.replace('?id=', '');
+    var freeField = {
+        type: jsPsychSurveyText,
+        questions: [
+            {prompt: 'Is there anything else you want to share about your experience doing these tasks?', name: 'freeField', rows: 50, columns: 100}
+        ]
+    };
+    var debrief = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `<p>Thank you for completing the study! You may click the button below to finish.</p>`,
+        choices: ['Click to finish'],
+    }
+
+    /* timeline setup */
+    // Intro
+    timeline.push(
+        welcome,
+        eBIFintro
+    );
+
+    // Setup randomized order of eBIF
+    var eBIF_Array = [eBIF1, eBIF2, eBIF3, eBIF4, eBIF5, eBIF6, eBIF7, eBIF8, eBIF9, eBIF10, eBIF11, eBIF12, eBIF13, eBIF14, eBIF15, eBIF16];
+    var eBIT_Array_R = jsPsych.randomization.shuffle(eBIF_Array)
+    timeline.push(
+        eBIT_Array_R[0],
+        eBIT_Array_R[1],
+        eBIT_Array_R[2],
+        eBIT_Array_R[3],
+        eBIT_Array_R[4],
+        eBIT_Array_R[5],
+        eBIT_Array_R[6],
+        eBIT_Array_R[7],
+        eBIT_Array_R[8],
+        eBIT_Array_R[9],
+        eBIT_Array_R[10],
+        eBIT_Array_R[11],
+        eBIT_Array_R[12],
+        eBIT_Array_R[13],
+        eBIT_Array_R[14],
+        eBIT_Array_R[15]
+    );
+
+    // Surveys
+    timeline.push(surveysIntro)
+    var individualDiff = [bfiS, cognition, selfConsciousness, PANAS, lifeSatisfaction, meaning, locusControl];
+    var individualDiffR = jsPsych.randomization.shuffle(individualDiff);
+    timeline.push(
+        individualDiffR[0],
+        individualDiffR[1],
+        individualDiffR[2],
+        individualDiffR[3],
+        individualDiffR[4],
+        individualDiffR[5],
+        individualDiffR[6]
+    );
+
+    // End of study
+    timeline.push(
+        freeField,
+        debrief
+    );
+
+    // Experiment logic
+    // let sona_id = jsPsych.data.urlVariables()['sona_id']
+
+    jsPsych.run(timeline)
+	</script>
+</html>
