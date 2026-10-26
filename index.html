@@ -1744,6 +1744,473 @@
         }
     };
 
+    // Internal Representations Questionnaire (IQR)
+    var IQR = {
+        type: jsPsychSurveyMultiChoiceC,
+        preamble: '<p align="left">Please answer the following questions about yourself. For each of the statements, indicate how much each statement is like you by using the following scale:</p>'+
+        '<p><table align="center">'+
+            '<tr>'+
+                '<th style="padding:10px">Strongly disagree</th>'+
+                '<th style="padding:10px">Disagree</th>'+
+                '<th style="padding:10px">Neither agree nor disagree</th>'+
+                '<th style="padding:10px">Agree</th>'+
+                '<th style="padding:10px">Strongly agree</th>'+
+            '</tr>'+
+            '<tr>'+
+                '<td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>'+
+            '</tr>'+
+        '</table></p>'+
+        '<p align="left">Please be as honest as you can throughout, and try not to let your responses to one question influence your response to other questions. There are no right or wrong answers.</p>',
+        data: { "trialType": "IQR"},
+        randomize_question_order: true,
+        questions: [
+            {
+                prompt: 'I often enjoy the use of mental pictures to reminisce.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz1'
+            },
+            {
+                prompt: 'I can close my eyes and easily picture a scene that I have experienced',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz2'
+            },
+            {
+                prompt: 'My mental images are very vivid and photographic.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz3'
+            },
+            {
+                prompt: 'The old saying "A picture is worth a thousand words" is certainly true for me.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz4'
+            },
+            {
+                prompt: 'When I think about someone I know well, I instantly see their face in my mind.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz5'
+            },
+            {
+                prompt: 'I often use mental images or pictures to help me remember things.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz6'
+            },
+            {
+                prompt: 'My memories are mainly visual in nature.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz7'
+            },
+            {
+                prompt: 'When traveling to get to somewhere I tend to think more visually than verbally.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz8'
+            },
+            {
+                prompt: 'If I talk to myself in my head it is usually accompanied by visual imagery.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz9'
+            },
+            {
+                prompt: 'If I imagine my memories visually they are more often moving than static.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-viz10'
+            },
+            {
+                prompt: 'When I think about someone I know well, I instantly hear their voice in my mind.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb1'
+            },
+            {
+                prompt: 'I think about problems in my mind in the form of a conversation with myself.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb2'
+            },
+            {
+                prompt: 'If I am walking somewhere by myself, I often have a silent conversation with myself.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb3'
+            },
+            {
+                prompt: 'If I am walking somewhere by myself, I frequently think of conversations that I\'ve recently had.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb4'
+            },
+            {
+                prompt: 'My inner speech helps my imagination.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb5'
+            },
+            {
+                prompt: 'I tend to think things through verbally when I am relaxing.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb6'
+            },
+            {
+                prompt: 'When thinking about a social problem, I often talk it through in my head.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb7'
+            },
+            {
+                prompt: 'I like to give myself some down time to talk through thoughts in my mind.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb8'
+            },
+            {
+                prompt: 'I hear words in my \"mind\'s ear\" when I think.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb9'
+            },
+            {
+                prompt: 'I rarely vocalize thoughts in my mind.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb10-R'
+            },
+            {
+                prompt: 'I often talk to myself internally while watching TV.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb11'
+            },
+            {
+                prompt: 'My memories often involve conversations I\'ve had.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-verb12'
+            },
+            {
+                prompt: 'I can easily imagine and mentally rotate three-dimensional geometric figures.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm1'
+            },
+            {
+                prompt: 'I can easily choose to imagine this sentence in my mind pronounced unnaturally slowly.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm2'
+            },
+            {
+                prompt: 'In school, I had no problems with geometry.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm3'
+            },
+            {
+                prompt: 'It is easy for me to imagine the sensation of licking a brick.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm4'
+            },
+            {
+                prompt: 'I find it difficult to imagine how a three-dimensional geometric figure would exactly look like when rotated.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm5-R'
+            },
+            {
+                prompt: 'I can easily imagine someone clearly talking, and then imagine the same voice with a heavy cold.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm6'
+            },
+            {
+                prompt: 'I think I have a large vocabulary in my native language compared to others.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm7'
+            },
+            {
+                prompt: 'I can easily imagine the sound of a trumpet getting louder.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-mm8'
+            },
+            {
+                prompt: 'I find it easy to decide if words rhyme by seeing their spelling in my mind\'s eye..',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text1'
+            },
+            {
+                prompt: 'When I hear someone talking, I see words written down in my mind.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text2'
+            },
+            {
+                prompt: 'I see words in my \"mind\'s eye\" when I think.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text3'
+            },
+            {
+                prompt: 'When I am introduced to someone for the first time, I imagine what their name would look like when written down.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text4'
+            },
+            {
+                prompt: 'A strategy I use to help me remember written material is imagining what the writing looks like.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text5'
+            },
+            {
+                prompt: 'I hear a running summary of everything I am doing in my head.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text6'
+            },
+            {
+                prompt: 'I rehearse in my mind how someone might respond to a text message before I send it.',
+                options: [
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5'
+                ],
+                horizontal: true,
+                name: 'IQR-text7'
+            }
+        ]
+    }
+
     // I-PANAS-SF (Positive and negative affect scale). Short form version, Thompson, 2007
     var PANAS = {
         type: jsPsychSurveyMultiChoiceC,
@@ -2106,7 +2573,7 @@
 
     // Surveys
     timeline.push(surveysIntro)
-    var individualDiff = [bfiS, cognition, selfConsciousness, PANAS, lifeSatisfaction, meaning, locusControl];
+    var individualDiff = [bfiS, cognition, selfConsciousness, PANAS, lifeSatisfaction, meaning, locusControl, IQR];
     var individualDiffR = jsPsych.randomization.shuffle(individualDiff);
     timeline.push(
         individualDiffR[0],
@@ -2115,7 +2582,8 @@
         individualDiffR[3],
         individualDiffR[4],
         individualDiffR[5],
-        individualDiffR[6]
+        individualDiffR[6],
+        individualDiffR[7]
     );
 
     // End of study
