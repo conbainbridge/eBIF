@@ -64,7 +64,7 @@ var SurveyKeytrackPlugin = (function (jspsych) {
           button_label: {
               type: jspsych.ParameterType.STRING,
               pretty_name: "Button label",
-              default: "Continue",
+              default: null,
           },
           /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
           autocomplete: {
@@ -204,11 +204,14 @@ var SurveyKeytrackPlugin = (function (jspsych) {
               html += "</div>";
           }
           // add submit button
-          html +=
+          if (trial.button_label !== null){
+            html +=
               '<input type="submit" id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text" value="' +
                   trial.button_label +
                   '"></input>';
-          html += "</form>";
+            html += "</form>";
+          }
+         
           display_element.innerHTML = html;
 
             // Countdown
